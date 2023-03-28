@@ -5,18 +5,23 @@ import (
 	"fmt"
 	"time"
 )
-type SchedulerTasks struct {
+type TaskScheduler struct {
 	taskList []Task
 }
 
-func (t *SchedulerTasks) AddTask(newTask Task) error {
+// factory method for schedulertasks
+func NewTaskScheduler() *TaskScheduler {
+	return &TaskScheduler{}
+}
+
+func (t *TaskScheduler) AddTask(newTask Task) error {
 
 	t.taskList = append(t.taskList, newTask)
 	//fmt.Printf("added new task %v", t.taskList)
 	return nil
 }
 
-func (t *SchedulerTasks) RunTasks(ctx context.Context, duration time.Duration) {
+func (t *TaskScheduler) RunTasks(ctx context.Context, duration time.Duration) {
 
 	ticker := time.NewTicker(duration)
 

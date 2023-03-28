@@ -18,16 +18,11 @@ func main() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 
-	taskObj := tasks.SchedulerTasks{}
+	taskScheduler := tasks.NewTaskScheduler()
 
-	t := tasks.Task{
-		Name:      "check Price",
-		Frequency: 3,
-		Laststart: time.Now(),
-		Handler:   service.GetPrices,
-	}
+	t := tasks.NewTask("check Price", 3, service.GetPrices, time.Now())
 
-	if err := taskObj.AddTask(t); err != nil {
+	if err := taskScheduler.AddTask(t); err != nil {
 		fmt.Println("Could not add the task")
 	}
 	t1 := tasks.Task{
@@ -36,10 +31,10 @@ func main() {
 		Laststart: time.Now(),
 		Handler:   service.BuyShares,
 	}
-	if err := taskObj.AddTask(t1); err != nil {
+	if err := taskScheduler.AddTask(t1); err != nil {
 		fmt.Println("Could not add the task")
 	}
-	taskObj.RunTasks(ctx, time.Duration(3)*time.Second)
+	taskScheduler.RunTasks(ctx, time.Duration(3)*time.Second)
 	//fmt.Printf(t.Name)
 
 	go func() {
